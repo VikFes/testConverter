@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import React, { useState, useEffect} from 'react';
 import './App.css';
+import Converter from './Converter';
+import Header from './Header';
+
 
 function App() {
+
+	const [value1, setVaue1] = useState({});
+	const [value2, setVaue2] = useState({});
+
+	const fething = async () => {
+		await fetch(`https://api.fastforex.io/fetch-one?from=USD&to=UAH&api_key=645c5d4126-d8f523bde8-r6yjey`)
+		.then(res => res.json())
+		 .then( data => setVaue1(data.result))
+
+		await fetch(`https://api.fastforex.io/fetch-one?from=EUR&to=UAH&api_key=645c5d4126-d8f523bde8-r6yjey`)
+		.then(res => res.json())
+		.then( data => setVaue2(data.result))
+	}
+
+	useEffect( () =>   {
+		fething()
+			setVaue1({});
+			setVaue2({})
+
+	}, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+		<Header value1={value1} value2={value2}/>
+		<Converter/>
     </div>
   );
 }
